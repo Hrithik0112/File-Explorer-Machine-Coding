@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { FolderIcon } from "@heroicons/react/24/solid";
 
 
+type Folder = {
+  name : string,
+  folders?: Folder[]
+}
+let folders: Folder[] = [
+  {
+    name: "Home",
+    folders: [
+      {
+        name: "Movies",
+        folders: [
+          {
+            name: "Action",
+            folders: [{ name: "2000s", folders: [{ name: "Populer" }] }, { name: "2010s" }],
+          },
+          { name: "Comedy", folders: [{ name: "2000s" }] },
+        ],
+      },
+      { name: "Music", folders: [{ name: "Rock" }, { name: "Classical" }] },
+      { name: "Pictures" },
+      { name: "Documents" },
+    ],
+  },
+];
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="p-8 max-w-sm mx-auto">
+      <ul>
+        {folders.map((folder) => (
+          <Folder folder={folder} key={folder?.name} />
+        ))}
+      </ul>
+    </div>
+  );
 }
 
-export default App
+const Folder = ({ folder } :{folder : Folder}) => {
+  return (
+    <li className="my-1.5" key={folder.name}>
+      <span className="flex items-center gap-1.5">
+        <FolderIcon className="size-6 text-sky-500" />
+        {folder.name}
+      </span>
+      <ul className="pl-6">
+        {folder.folders?.map((folder) => (
+          <Folder folder={folder} key={folder.name} />
+        ))}
+      </ul>
+    </li>
+  );
+};
+
+export default App;
